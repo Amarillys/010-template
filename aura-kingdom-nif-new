@@ -1,0 +1,121 @@
+//------------------------------------------------
+//--- 010 Editor v12.0.1 Binary Template
+//
+//      File: Aura Kingdom Nif<20.3.1.2> Template
+//   Authors: Amarillys
+//   Version: 0.0.1
+//   Purpose: nothing
+//  Category: Game
+// File Mask: 
+//  ID Bytes: Game
+//   History: 
+//------------------------------------------------
+
+typedef struct {
+    int strlen;
+    char Text[strlen];
+} NString;
+
+typedef struct {
+    local int i;
+    for ( i = 0; i < StringCount; ++i) {
+        NString ConstantString;
+    }
+} StringTable;
+
+typedef struct (int size){
+    byte Content[size];
+} Block;
+
+typedef byte bool;
+
+typedef struct {
+    float x;
+    float y;
+    float z;
+} Vector3;
+
+typedef struct {
+    hfloat x;
+    hfloat y;
+    hfloat z;
+} HFVector3;
+
+typedef struct {
+    byte x;
+    byte y;
+    byte z;
+} ByteVector3;
+
+typedef struct {
+    hfloat x;
+    hfloat y;
+} UVSet;
+
+typedef struct {
+    short a;
+    short b;
+    short c;
+} TriAngle;
+
+typedef struct (short size, unsigned short verticesCount) {
+    local int s, v;
+    for (s = 0; s < size; s++)
+        for (v = 0; v < verticesCount; v++)
+            UVSet UV;
+} UVSets;
+
+typedef struct {
+    int GroupId;
+    unsigned short VerticesCount;
+    byte keepFlag;
+    byte CompressFlag;
+    bool HasVertices;
+    HFVector3 Vertices[VerticesCount];
+    short VectorFlag;
+    bool HasNormal;
+    ByteVector3 Normals[VerticesCount];
+    Vector3 Center;
+    float Radius;
+    bool HasVertexColor;
+    local int j;
+    UVSets UV(VectorFlag, VerticesCount);    
+    short ConsistencyFlag;
+    int AdditionData;
+    unsigned short TriAngleCount;
+    unsigned int TriAnglePointCount;
+    bool HasTriAngle;
+    TriAngle TriAngles[TriAngleCount];
+    unsigned short MatchGroupCount;
+} TriSharpData;
+
+char Header[39];
+char VersionZ;
+char VersionY;
+char VersionX;
+char MainVersion;
+char Dummy[5] <hidden=true>;
+int BlockCount;
+short BlockTypeCount;
+int BlockTypeTable[BlockTypeCount];
+
+short BlockTypes[BlockCount];
+int BlockSizes[BlockCount];
+
+int StringCount;
+int MaxStringLength;
+StringTable ConstStringTable;
+
+char Dummy2[4] <hidden=true>;
+
+local int i;
+for ( i = 0; i < BlockCount; i++) {
+   
+    if (BlockTypeTable[BlockTypes[i]] == -1384521423) {
+        TriSharpData NiTriSharpData;
+    } else {
+        Block Node(BlockSizes[i]);
+    }
+}
+
+byte Ending[8];
