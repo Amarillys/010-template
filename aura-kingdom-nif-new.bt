@@ -16,6 +16,11 @@ typedef struct {
     char Text[strlen];
 } NString;
 
+typedef unsigned short ushort;
+typedef unsigned int uint;
+typedef int Ref;
+typedef short Flag;
+
 typedef struct {
     local int i;
     for ( i = 0; i < StringCount; ++i) {
@@ -58,7 +63,7 @@ typedef struct {
     short c;
 } TriAngle;
 
-typedef struct (short size, unsigned short verticesCount) {
+typedef struct (short size, ushort verticesCount) {
     local int s, v;
     for (s = 0; s < size; s++)
         for (v = 0; v < verticesCount; v++)
@@ -67,7 +72,7 @@ typedef struct (short size, unsigned short verticesCount) {
 
 typedef struct {
     int GroupId;
-    unsigned short VerticesCount;
+    ushort VerticesCount;
     byte keepFlag;
     byte CompressFlag;
     bool HasVertices;
@@ -82,12 +87,116 @@ typedef struct {
     UVSets UV(VectorFlag, VerticesCount);    
     short ConsistencyFlag;
     int AdditionData;
-    unsigned short TriAngleCount;
-    unsigned int TriAnglePointCount;
+    ushort TriAngleCount;
+    uint TriAnglePointCount;
     bool HasTriAngle;
     TriAngle TriAngles[TriAngleCount];
-    unsigned short MatchGroupCount;
+    ushort MatchGroupCount;
 } TriSharpData;
+
+typedef struct (int size){
+    byte Content[size];
+} NiNode;
+
+typedef struct (int size){
+    byte Content[size];
+} NiTriShape;
+
+typedef struct (int size){
+    byte Content[size];
+} NiZBufferProperty;
+
+typedef struct (int size){
+    byte Content[size];
+} NiVertexColorProperty;
+
+typedef struct {
+    float u;
+    float v;
+} Coord;
+
+typedef struct {
+    Ref NiSourceTexture;
+    Flag TextureFlag;
+    // ushort MaxAnisotropy;
+    bool HasTextureTransform;
+    if (HasTextureTransform > 0) {
+        Coord Translation;
+        Coord Scale;
+        float Rotation;
+        uint TransformMethod;
+        Coord Center;    
+    }
+} TexDesc;
+
+typedef struct (int size){
+    int NameRef;
+    uint ExtraData;
+    Ref DataList;
+    short TextureFlag;
+    uint TextureCount;
+    bool HasBaseTexture;
+    if (HasBaseTexture > 0) TexDesc BaseTexture;
+    bool HasDarkTexture;
+    if (HasDarkTexture > 0) TexDesc DarlTexture;
+    bool HasDetailTexture;
+    if (HasDetailTexture > 0) TexDesc DetailTexture;
+    bool HasGlossTexture;
+    if (HasGlossTexture > 0) TexDesc GlossTexture;
+    bool HasGlowTexture;
+    if (HasGlowTexture > 0) TexDesc GlowTexture;
+    bool HasBumpMapTexture;
+    if (HasBumpMapTexture > 0) TexDesc BumpMapTexture;
+    bool HasNormalTexture;
+    if (HasNormalTexture > 0) TexDesc NormalTexture;
+    bool HasParallaxTexture;
+    if (HasParallaxTexture > 0) TexDesc ParallaxTexture;
+    bool HasDecal0Texture;
+    if (HasDecal0Texture > 0) TexDesc Decal0Texture;
+    bool HasDecal1Texture;
+    if (HasDecal1Texture > 0) TexDesc Decal1Texture;
+    bool HasDecal2Texture;
+    if (HasDecal2Texture > 0) TexDesc Decal2Texture;
+    uint ShaderTextureCount;
+    TexDesc ShaderTexture[ShaderTextureCount];
+} NiTexturingProperty;
+
+typedef struct (int size){
+    int NameIndex;
+    uint ExtraDataList;
+    Ref ExtraData;
+    bool UseExternal;
+    uint StringIndex<comment=getStringFromTable>;
+    Ref NiObject;
+    uint FormatPref[3];
+    bool IsStatic;
+    bool Render;
+    bool PersistRenderData;
+} NiSourceTexture;
+
+typedef struct (int size){
+    byte Content[size];
+} NiMaterialProperty;
+
+typedef struct (int size){
+    byte Content[size];
+} NiSkinInstance;
+
+typedef struct (int size){
+    byte Content[size];
+} NiSkinData;
+
+typedef struct (int size){
+    byte Content[size];
+} NiSkinPartition;
+
+typedef struct {
+    byte Content[8];
+} NiStringExtraData;
+
+typedef struct (int size){
+    byte Content[size];
+} NiParticleSystem;
 
 char Header[39];
 char VersionZ;
@@ -106,14 +215,30 @@ int StringCount;
 int MaxStringLength;
 StringTable ConstStringTable;
 
+string getStringFromTable (uint &index) {
+    return ConstStringTable.ConstantString[index];
+}
+
 char Dummy2[4] <hidden=true>;
 
 local int i;
 for ( i = 0; i < BlockCount; i++) {
-   
-    if (BlockTypeTable[BlockTypes[i]] == -1384521423) {
-        TriSharpData NiTriSharpData;
-    } else {
+    if (BlockTypeTable[BlockTypes[i]] == -1384521423) TriSharpData Node;
+    else if (BlockTypeTable[BlockTypes[i]] == -1114957571) NiNode Node(BlockSizes[i]);
+    else if (BlockTypeTable[BlockTypes[i]] == -153521904) NiZBufferProperty Node(BlockSizes[i]);
+    else if (BlockTypeTable[BlockTypes[i]] == -300401895) NiVertexColorProperty Node(BlockSizes[i]);
+    else if (BlockTypeTable[BlockTypes[i]] == -900610057) NiTriShape Node(BlockSizes[i]);
+    else if (BlockTypeTable[BlockTypes[i]] == 1949182566) NiTexturingProperty Node(BlockSizes[i]);
+    else if (BlockTypeTable[BlockTypes[i]] == 990829913) NiSourceTexture Node(BlockSizes[i]);
+    else if (BlockTypeTable[BlockTypes[i]] == 570111714) NiMaterialProperty Node(BlockSizes[i]);
+    else if (BlockTypeTable[BlockTypes[i]] == -860174325) NiNode Node(BlockSizes[i]);
+    else if (BlockTypeTable[BlockTypes[i]] == 1962462785) NiSkinInstance Node(BlockSizes[i]);
+    else if (BlockTypeTable[BlockTypes[i]] == -988995002) NiSkinData Node(BlockSizes[i]);
+    else if (BlockTypeTable[BlockTypes[i]] == -138687802) NiSkinPartition Node(BlockSizes[i]);
+    else if (BlockTypeTable[BlockTypes[i]] == -94108916) NiNode Node(BlockSizes[i]);
+    else if (BlockTypeTable[BlockTypes[i]] == -1040746359) NiNode Node(BlockSizes[i]);
+    else if (BlockTypeTable[BlockTypes[i]] == 1527966583) NiNode Node(BlockSizes[i]);
+    else {
         Block Node(BlockSizes[i]);
     }
 }
