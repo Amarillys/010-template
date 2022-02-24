@@ -4,12 +4,12 @@
 //
 //      File: Aura Kingdom Nif<20.3.1.2> Template
 //   Authors: Amarillys
-//   Version: 0.0.2
+//   Version: 0.0.3
 //   Purpose: nothing
 //  Category: Game
 // File Mask: 
 //  ID Bytes: Game
-//   History: 2022.2.23
+//   History: 2022.2.24
 //------------------------------------------------
 
 typedef struct {
@@ -80,7 +80,8 @@ typedef struct {
     HFVector3 Vertices[VerticesCount];
     short VectorFlag;
     bool HasNormal;
-    ByteVector3 Normals[VerticesCount];
+    if (HasNormal == 15) HFVector3 Normals[VerticesCount];
+    else ByteVector3 Normals[VerticesCount];
     Vector3 Center;
     float Radius;
     bool HasVertexColor;
@@ -136,28 +137,28 @@ typedef struct (int size){
     Ref DataList;
     short TextureFlag;
     uint TextureCount;
-    if (HasBaseTexture > 0) bool HasBaseTexture;
+    if (TextureCount > 0) bool HasBaseTexture;
     if (HasBaseTexture > 0 && TextureCount > 0) TexDesc BaseTexture;
     if (TextureCount > 1) bool HasDarkTexture;
-    if (HasDarkTexture > 0 && TextureCount > 1) TexDesc DarlTexture;
+    if (TextureCount > 1 && HasDarkTexture > 0) TexDesc DarlTexture;
     if (TextureCount > 2) bool HasDetailTexture;
-    if (HasDetailTexture > 0 && TextureCount > 2) TexDesc DetailTexture;
+    if (TextureCount > 2 && HasDetailTexture > 0) TexDesc DetailTexture;
     if (TextureCount > 3) bool HasGlossTexture;
-    if (HasGlossTexture > 0 && TextureCount > 3) TexDesc GlossTexture;
+    if (TextureCount > 3 && HasGlossTexture > 0) TexDesc GlossTexture;
     if (TextureCount > 4) bool HasGlowTexture;
-    if (HasGlowTexture > 0 && TextureCount > 4) TexDesc GlowTexture;
+    if (TextureCount > 4 && HasGlowTexture > 0) TexDesc GlowTexture;
     if (TextureCount > 5) bool HasBumpMapTexture;
-    if (HasBumpMapTexture > 0 && TextureCount > 5) TexDesc BumpMapTexture;
+    if (TextureCount > 5 && HasBumpMapTexture > 0) TexDesc BumpMapTexture;
     if (TextureCount > 6) bool HasNormalTexture;
-    if (HasNormalTexture > 0 && TextureCount > 6) TexDesc NormalTexture;
-    if (TextureCount > 7)bool HasParallaxTexture;
-    if (HasParallaxTexture > 0 && TextureCount > 7) TexDesc ParallaxTexture;
-    if (TextureCount > 8)bool HasDecal0Texture;
-    if (HasDecal0Texture > 0 && TextureCount > 8) TexDesc Decal0Texture;
+    if (TextureCount > 6 && HasNormalTexture > 0) TexDesc NormalTexture;
+    if (TextureCount > 7) bool HasParallaxTexture;
+    if (TextureCount > 7 && HasParallaxTexture > 0) TexDesc ParallaxTexture;
+    if (TextureCount > 8) bool HasDecal0Texture;
+    if (TextureCount > 8 && HasDecal0Texture > 0) TexDesc Decal0Texture;
     if (TextureCount > 9) bool HasDecal1Texture;
-    if (HasDecal1Texture > 0 && TextureCount > 9) TexDesc Decal1Texture;
+    if (TextureCount > 9 && HasDecal1Texture > 0) TexDesc Decal1Texture;
     if (TextureCount > 10) bool HasDecal2Texture;
-    if (HasDecal2Texture > 0 && TextureCount > 10) TexDesc Decal2Texture;
+    if (TextureCount > 10 && HasDecal2Texture > 0) TexDesc Decal2Texture;
     uint ShaderTextureCount;
     TexDesc ShaderTexture[ShaderTextureCount];
 } NiTexturingProperty;
