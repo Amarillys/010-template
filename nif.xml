@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE niftoolsxml>
-<niftoolsxml version="0.9.0.0">
+<niftoolsxml version="0.9.0.1">
     <!--These are the version numbers marked as supported by NifSkope.
         The num argument is the numeric representation created by storing
         each part of the version in a byte.  For example, 4.0.0.2 is
@@ -1242,6 +1242,14 @@
         <add name="g" type="byte">Green color component.</add>
         <add name="b" type="byte">Blue color component.</add>
         <add name="a" type="byte">Alpha color component.</add>
+    </compound>
+	
+    <compound name="HalfColor4">
+        A color with alpha (red, green, blue, alpha).
+        <add name="r" type="hfloat">Red color component.</add>
+        <add name="g" type="hfloat">Green color component.</add>
+        <add name="b" type="hfloat">Blue color component.</add>
+        <add name="a" type="hfloat">Alpha color component.</add>
     </compound>
 
     <compound name="FilePath">
@@ -3204,7 +3212,8 @@
         <add name="BS Vector Flags" type="BSVectorFlags" vercond="((Version == 20.2.0.7) &amp;&amp; (User Version 2 &gt; 0))" />
         <add name="Material CRC" type="uint" ver1="20.2.0.7" ver2="20.2.0.7" userver="12" />
         <add name="Has Normals" type="bool">Do we have lighting normals? These are essential for proper lighting: if not present, the model will only be influenced by ambient light.</add>
-        <add name="Normals" type="Vector3" arr1="Num Vertices" cond="(Has Normals &gt; 0) &amp;&amp; (Has Normals != 6)">The lighting normals.</add>
+        <add name="Normals" type="Vector3" arr1="Num Vertices" cond="(Has Normals &gt; 0) &amp;&amp; (Has Normals != 6) &amp;&amp; (Has Normals != 15)">The lighting normals.</add>
+        <add name="Normals" type="HalfVector3" arr1="Num Vertices" cond="Has Normals == 15">The lighting normals.</add>
         <add name="Normals" type="ByteVector3" arr1="Num Vertices" ver1="20.3.1.1" cond="Has Normals == 6">The lighting normals.</add>
         <add name="Tangents" type="Vector3" arr1="Num Vertices" cond="(Has Normals) &amp;&amp; ((Vector Flags | BS Vector Flags) &amp; 4096)" ver1="10.1.0.0">Tangent vectors.</add>
         <add name="Bitangents" type="Vector3" arr1="Num Vertices" cond="(Has Normals) &amp;&amp; ((Vector Flags | BS Vector Flags) &amp; 4096)" ver1="10.1.0.0">Bitangent vectors.</add>
@@ -3222,7 +3231,8 @@
 
             Note 2: set to either 0 or 0xFFFFFFFF for NifTexture compatibility.
         </add>
-        <add name="Vertex Colors" type="Color4" arr1="Num Vertices" cond="(Has Vertex Colors &gt; 0) &amp;&amp; (Has Vertex Colors != 7)">The vertex colors.</add>
+        <add name="Vertex Colors" type="Color4" arr1="Num Vertices" cond="(Has Vertex Colors &gt; 0) &amp;&amp; (Has Vertex Colors != 7) &amp;&amp; (Has Vertex Colors != 15)">The vertex colors.</add>
+        <add name="Vertex Colors" type="HalfColor4" arr1="Num Vertices" ver1="20.3.1.2" cond="Has Vertex Colors == 15">The vertex colors.</add>
         <add name="Vertex Colors" type="ByteColor4" arr1="Num Vertices" ver1="20.3.1.1" cond="Has Vertex Colors == 7">The vertex colors.</add>
         <add name="Num UV Sets" type="ushort" ver2="4.2.2.0">The lower 6 (or less?) bits of this field represent the number of UV texture sets. The other bits are probably flag bits. For versions 10.1.0.0 and up, if bit 12 is set then extra vectors are present after the normals.</add>
         <add name="Has UV" type="bool" ver2="4.0.0.2">
@@ -4623,15 +4633,15 @@
         <add name="Flags" type="Flags" ver1="20.1.0.2">Property flags.</add>
         <add name="Apply Mode" type="ApplyMode" default="APPLY_MODULATE" ver1="3.3.0.13" ver2="20.1.0.1">Determines how the texture will be applied.  Seems to have special functions in Oblivion.</add>
         <add name="Texture Count" type="uint" default="7">Number of textures.</add>
-        <add name="Has Base Texture" type="bool">Do we have a base texture?</add>
+        <add name="Has Base Texture" type="bool" cond="Texture Count &gt; 0">Do we have a base texture?</add>
         <add name="Base Texture" type="TexDesc" cond="Has Base Texture">The base texture.</add>
-        <add name="Has Dark Texture" type="bool">Do we have a dark texture?</add>
+        <add name="Has Dark Texture" type="bool" cond="Texture Count &gt; 1">Do we have a dark texture?</add>
         <add name="Dark Texture" type="TexDesc" cond="Has Dark Texture">The dark texture.</add>
-        <add name="Has Detail Texture" type="bool">Do we have a detail texture?</add>
+        <add name="Has Detail Texture" type="bool" cond="Texture Count &gt; 2">Do we have a detail texture?</add>
         <add name="Detail Texture" type="TexDesc" cond="Has Detail Texture">The detail texture.</add>
-        <add name="Has Gloss Texture" type="bool">Do we have a gloss texture?</add>
+        <add name="Has Gloss Texture" type="bool" cond="Texture Count &gt; 3">Do we have a gloss texture?</add>
         <add name="Gloss Texture" type="TexDesc" cond="Has Gloss Texture">The gloss texture.</add>
-        <add name="Has Glow Texture" type="bool">Do we have a glow texture?</add>
+        <add name="Has Glow Texture" type="bool" cond="Texture Count &gt; 4">Do we have a glow texture?</add>
         <add name="Glow Texture" type="TexDesc" cond="Has Glow Texture">The glowing texture.</add>
         <add name="Has Bump Map Texture" type="bool" ver1="3.3.0.13" cond="Texture Count &gt; 5">Do we have a bump map texture?</add>
         <add name="Bump Map Texture" type="TexDesc" cond="Has Bump Map Texture">The bump map texture.</add>
