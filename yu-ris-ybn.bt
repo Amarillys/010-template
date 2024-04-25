@@ -1,0 +1,52 @@
+//------------------------------------------------
+//--- 010 Editor v12.0.1 Binary Template
+//
+//      File: yu-ris-ynb.bt
+//   Authors: Amarillys
+//   Version: 482
+//   Purpose: analyze yu-ris binary scripts
+//  Category: Binary
+// File Mask: *.ybn
+//  ID Bytes: 59 53 54 42
+//   History: 
+//------------------------------------------------
+
+typedef struct {
+    uint16 index;
+    uint16 type;
+    uint32 size;
+    uint32 offset;
+    local byte arg[1024];
+} Argument;
+
+typedef struct {
+    byte code;
+    byte argCount;
+    uint16 wtf;
+} Instruction;
+
+struct Arg (int size)
+{
+    byte content[size];
+};
+
+char Sign[4];
+int32 Version;
+int32 InstructionCount;
+int32 CodeSize;
+int32 ArgSize;
+int32 ResSize;
+int32 WTFSize;
+char padding[4];
+Instruction Instructions[InstructionCount];
+
+local int argCount = ArgSize / 12;
+Argument Arguments[argCount];
+
+local int i;
+local int j;
+for (i = 0; i < argCount; i++)
+{
+    Arg arg(Arguments[i].size);
+}
+byte WTFData[WTFSize];
